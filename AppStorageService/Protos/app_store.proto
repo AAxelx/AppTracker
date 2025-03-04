@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package AppStoreGrpc;
+
+service AppStoreService {
+  rpc RegisterApplication (ApplicationRequest) returns (ApplicationResponse);
+}
+
+message ApplicationRequest {
+  string id = 1;
+  string url = 2;
+}
+
+message ApplicationResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -1,40 +1,35 @@
 using AppStorageService.Infrastructure.Contexts;
 using AppStorageService.Infrastructure.Entities;
 using AppStorageService.Infrastructure.Repositories.Abstractions;
+using AppStorageService.Services.Enums;
 using AppStorageService.Services.Models;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppStorageService.Infrastructure.Repositories;
 
-public class ApplicationRepository : IApplicationRepository
+public class ApplicationRepository(MsSqlDbContext context, IMapper mapper) : IApplicationRepository
 {
-  private readonly MsSqlDbContext _context;
-  private readonly IMapper _mapper;
-
-  public ApplicationRepository(MsSqlDbContext context, IMapper mapper)
+  public async Task<List<ApplicationModel>> GetByStatusAsync(ApplicationStatus status)
   {
-    _context = context;
-    _mapper = mapper;
-  }
+    var applications = await context.Applications
+      .Where(a => a.Status == (int)status)
+      .ToListAsync();
 
-  public async Task<List<ApplicationModel>> GetAllAsync()
-  {
-    var entities = await _context.Set<ApplicationEntity>().AsNoTracking().ToListAsync();
-    return _mapper.Map<List<ApplicationModel>>(entities);
+    var result = applications.Select(mapper.Map<ApplicationModel>).ToList();
+
+    return result;
   }
 
   public async Task AddAsync(ApplicationModel model)
   {
-    var entity = _mapper.Map<ApplicationEntity>(model);
-    
-    await _context.Set<ApplicationEntity>().AddAsync(entity);
-    await _context.SaveChangesAsync();
+    await context.Applications.AddAsync(mapper.Map<ApplicationEntity>(model));
+    await context.SaveChangesAsync();
   }
 
   public async Task DeleteAsync(Guid id)
   {
-    _context.Set<ApplicationEntity>().Remove(new ApplicationEntity { Id = id });
-    await _context.SaveChangesAsync();
+    context.Applications.Remove(new ApplicationEntity { Id = id });
+    await context.SaveChangesAsync();
   }
 }
