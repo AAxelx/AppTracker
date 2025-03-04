@@ -1,4 +1,11 @@
 using AppStorageService.Infrastructure.Contexts;
+using AppStorageService.Infrastructure.Repositories;
+using AppStorageService.Infrastructure.Repositories.Abstractions;
+using AppStorageService.Mappings;
+using AppStorageService.Services.Grpc.GrpcServices;
+using AppStorageService.Services.Grpc.GrpcServices.Abstractions;
+using AppStorageService.Services.Services;
+using AppStorageService.Services.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppStorageService;
@@ -9,7 +16,18 @@ public class Startup(IConfiguration configuration)
 
   public void ConfigureServices(IServiceCollection services)
   {
+    services.AddCors(options =>
+    {
+      options.AddPolicy("AllowAllOrigins", policy =>
+      {
+        policy.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+      });
+    });
+    
     services.AddAuthorization();
+    services.AddControllers();
     
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen(c =>
@@ -21,12 +39,34 @@ public class Startup(IConfiguration configuration)
       });
     });
     
+    services.AddAutoMapper(typeof(ApplicationMappingProfile).Assembly);
+    
+    services.AddGrpc();
+    var grpcSettings = Configuration.GetSection("GrpcSettings");
+    
+    services.AddGrpcClient<AppStoreGrpc.AppStoreService.AppStoreServiceClient>(o =>
+    {
+      o.Address = new Uri(grpcSettings["AppStoreServiceUrl"]!);
+    });
+    services.AddGrpcClient<GooglePlayGrpc.GooglePlayService.GooglePlayServiceClient>(o =>
+    {
+      o.Address = new Uri(grpcSettings["GooglePlayServiceUrl"]!);
+    });
+    
+    services.AddScoped<IAppStoreGrpcService, AppStoreGrpcService>();
+    services.AddScoped<IGooglePlayGrpcService, GooglePlayGrpcService>();
+    
     services.AddDbContext<MsSqlDbContext>(options =>
       options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnection")));
+
+    services.AddScoped<IApplicationService, ApplicationService>();
+    services.AddScoped<IApplicationRepository, ApplicationRepository>();
   }
 
   public void Configure(WebApplication app)
   {
+    app.UseCors("AllowAllOrigins");
+
     if (app.Environment.IsDevelopment())
     {
       app.UseSwagger();
@@ -40,6 +80,8 @@ public class Startup(IConfiguration configuration)
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
+    app.MapControllers();
+
     app.Run();
   }
 }
