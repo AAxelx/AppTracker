@@ -1,12 +1,12 @@
 using AppStorageService.Services.Enums;
 
-namespace AppStorageService.Services.Models;
+namespace AppStorageService.Services.DTOs;
 
-public class ApplicationModel
+public record ApplicationDto
 {
-  public Guid Id { get; set; }
-  public string Name { get; set; }
-  public string Url { get; set; } = null!;
+  public Guid Id { get; init; }
+  public string Name { get; init; }
+  public string Url { get; init; }
   public ApplicationStatus Status { get; set; }
   public StoreType StoreType { get; set; }
   public DateTime CreatedAt { get; set; }
