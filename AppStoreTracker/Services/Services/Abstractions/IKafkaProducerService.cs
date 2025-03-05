@@ -5,5 +5,5 @@ namespace AppStoreTracker.Services.Services.Abstractions;
 
 public interface IKafkaProducerService
 {
-  Task SendMessageAsync(List<ApplicationStatusDto> message);
+  Task SendMessageAsync(List<UpdateApplicationsStatusDto> message);
 }

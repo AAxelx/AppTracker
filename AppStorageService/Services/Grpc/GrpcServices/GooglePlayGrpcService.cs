@@ -7,7 +7,7 @@ namespace AppStorageService.Services.Grpc.GrpcServices;
 
 public class GooglePlayGrpcService(GooglePlayGrpc.GooglePlayService.GooglePlayServiceClient client, IMapper mapper) : IGooglePlayGrpcService
 {
-  public async Task SendApplicationAsync(ApplicationModel model)
+  public async Task AddTrackingApplicationAsync(ApplicationModel model)
   {
     try
     {

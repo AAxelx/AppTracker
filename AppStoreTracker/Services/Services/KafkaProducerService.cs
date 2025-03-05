@@ -22,7 +22,7 @@ public class KafkaProducerService : IKafkaProducerService
     _logger = logger;
   }
 
-  public async Task SendMessageAsync(List<ApplicationStatusDto> message)
+  public async Task SendMessageAsync(List<UpdateApplicationsStatusDto> message)
   {
     var jsonMessage = JsonSerializer.Serialize(message);
 

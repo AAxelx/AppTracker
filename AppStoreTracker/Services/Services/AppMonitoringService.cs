@@ -33,7 +33,7 @@ public class AppMonitoringService(
                 
                 var apps = await applicationRepository.GetAllApplicationsStatusAsync(stoppingToken);
                 
-                var updatedApplicationDtos = new ConcurrentBag<ApplicationStatusDto>();
+                var updatedApplicationDtos = new ConcurrentBag<UpdateApplicationsStatusDto>();
                 var tasks = new List<Task>();
 
                 foreach (var app in apps)
@@ -62,7 +62,7 @@ public class AppMonitoringService(
         }
     }
 
-    private async Task MonitorAppStatusAsync(ApplicationStatusDto app, CancellationToken stoppingToken, ConcurrentBag<ApplicationStatusDto> updates)
+    private async Task MonitorAppStatusAsync(ApplicationStatusDto app, CancellationToken stoppingToken, ConcurrentBag<UpdateApplicationsStatusDto> updates)
     {
         var response = await _httpClient.GetAsync(app.Url, stoppingToken);
         var currentStatus = response.StatusCode == HttpStatusCode.NotFound ? ApplicationStatus.Deleted : ApplicationStatus.Active;
@@ -70,7 +70,7 @@ public class AppMonitoringService(
         if (app.Status != currentStatus)
         {
             app.Status = currentStatus;
-            updates.Add(app);
+            updates.Add(mapper.Map<UpdateApplicationsStatusDto>(app));
         }
 
         _semaphore.Release();

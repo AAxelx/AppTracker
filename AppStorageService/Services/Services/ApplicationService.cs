@@ -45,13 +45,34 @@ public class ApplicationService(
     switch (model.StoreType)
     {
       case StoreType.AppStore:
-        await appStoreGrpcService.SendApplicationAsync(model);
+        await appStoreGrpcService.AddTrackingApplicationAsync(model);
         break;
       case StoreType.GooglePlay:
-        await googlePlayGrpcService.SendApplicationAsync(model);
+        await googlePlayGrpcService.AddTrackingApplicationAsync(model);
         break;
     }
   }
 
-  public async Task DeleteAsync(Guid id) => await applicationRepository.DeleteAsync(id);
+  public async Task DeleteAsync(Guid id)
+  {
+    var application = await applicationRepository.GetByIdAsync(id);
+
+    if (application == null)
+      return;
+
+    await applicationRepository.DeleteAsync(id);
+
+    switch (application.StoreType)
+    {
+      case StoreType.AppStore:
+        await appStoreGrpcService.RemoveApplicationTrackingAsync(id.ToString());
+        break;
+      case StoreType.GooglePlay:
+        // await googlePlayGrpcService.RemoveApplicationTrackingAsync(id.ToString()); TODO: implement it
+        break;
+      default:
+        throw new InvalidOperationException("Unsupported store type");
+    }
+  }
+
 }

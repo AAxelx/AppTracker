@@ -4,5 +4,6 @@ namespace AppStorageService.Services.Grpc.GrpcServices.Abstractions;
 
 public interface IAppStoreGrpcService
 {
-  Task SendApplicationAsync(ApplicationModel model);
+  Task AddTrackingApplicationAsync(ApplicationModel model);
+  Task RemoveApplicationTrackingAsync(string id);
 }

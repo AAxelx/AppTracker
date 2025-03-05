@@ -42,9 +42,10 @@ public class ApplicationMappingProfile : Profile
       .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
       .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url));
 
-    CreateMap<ApplicationModel, AppStoreGrpc.ApplicationRequest>()
+    CreateMap<ApplicationModel, AppStoreGrpc.AddApplicationRequest>()
       .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-      .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url));
+      .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
+      .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
     
     CreateMap<ApplicationModel, GooglePlayGrpc.ApplicationRequest>()
       .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
