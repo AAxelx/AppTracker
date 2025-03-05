@@ -7,6 +7,6 @@ public interface IApplicationRepository
 {
   Task<List<ApplicationStatusDto>> GetAllApplicationsStatusAsync(CancellationToken stoppingToken);
   Task<bool> AddAsync(ApplicationModel application);
-  Task UpdateApplicationsStatusAsync(List<ApplicationStatusDto> updateDtos, CancellationToken stoppingToken);
+  Task UpdateApplicationsStatusAsync(List<UpdateApplicationsStatusDto> updateDtos, CancellationToken stoppingToken);
   Task<bool> RemoveAsync(Guid id);
 }

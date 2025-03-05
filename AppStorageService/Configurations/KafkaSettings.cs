@@ -1,4 +1,4 @@
-namespace AppStoreTracker.Configurations;
+namespace AppStorageService.Configurations;
 
 public record KafkaSettings
 {

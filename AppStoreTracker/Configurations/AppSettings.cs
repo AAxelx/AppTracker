@@ -1,7 +1,7 @@
 namespace AppStoreTracker.Configurations;
 
-public class AppSettings
+public record AppSettings
 {
-  public int MaxParallelRequests { get; set; }
-  public int CheckIntervalMinutes { get; set; }
+  public int MaxParallelRequests { get; init; }
+  public int CheckIntervalMinutes { get; init; }
 }

@@ -47,7 +47,7 @@ public class ApplicationRepository(MsSqlDbContext dbContext, IMapper mapper) : I
     return result > 0;
   }
 
-  public async Task UpdateApplicationsStatusAsync(List<ApplicationStatusDto> updateDtos, CancellationToken stoppingToken)
+  public async Task UpdateApplicationsStatusAsync(List<UpdateApplicationsStatusDto> updateDtos, CancellationToken stoppingToken)
   {
     if (updateDtos == null || !updateDtos.Any())
       return;

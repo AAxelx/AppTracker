@@ -10,7 +10,7 @@ public class AppStoreTrackingGrpcService(IApplicationTrackingService application
   : AppStoreGrpc.AppStoreTrackingGrpcService.AppStoreTrackingGrpcServiceBase
 {
 
-  public override async Task<ApplicationResponse> AddApplication(AddApplicationRequest request, ServerCallContext context)
+  public override async Task<ApplicationResponse> AddApplicationTracking(AddApplicationRequest request, ServerCallContext context)
   {
     var success = await applicationTrackingService.AddApplicationAsync(mapper.Map<AddApplicationRequestDto>(request));
 
@@ -21,7 +21,7 @@ public class AppStoreTrackingGrpcService(IApplicationTrackingService application
     };
   }
 
-  public override async Task<ApplicationResponse> RemoveApplication(RemoveApplicationRequest request, ServerCallContext context)
+  public override async Task<ApplicationResponse> RemoveApplicationTracking(RemoveApplicationRequest request, ServerCallContext context)
   {
     var success = await applicationTrackingService.RemoveApplicationAsync(request.Id);
 

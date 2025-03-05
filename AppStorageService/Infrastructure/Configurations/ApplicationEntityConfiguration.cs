@@ -9,7 +9,7 @@ public class ApplicationEntityConfiguration : IEntityTypeConfiguration<Applicati
     public void Configure(EntityTypeBuilder<ApplicationEntity> builder)
     {
         builder.HasKey(a => a.Id);
-        builder.Property(a => a.Name).IsRequired(false).HasColumnType("nvarchar(50)");
+        builder.Property(a => a.Name).IsRequired().HasColumnType("nvarchar(50)");
         builder.Property(a => a.Url).IsRequired().HasColumnType("nvarchar(120)");
         builder.Property(a => a.Status).IsRequired().HasColumnType("int");
         builder.Property(a => a.StoreType).IsRequired().HasColumnType("int");

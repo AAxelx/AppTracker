@@ -1,9 +1,12 @@
+using AppStorageService.Configurations;
 using AppStorageService.Infrastructure.Contexts;
 using AppStorageService.Infrastructure.Repositories;
 using AppStorageService.Infrastructure.Repositories.Abstractions;
 using AppStorageService.Mappings;
 using AppStorageService.Services.Grpc.GrpcServices;
 using AppStorageService.Services.Grpc.GrpcServices.Abstractions;
+using AppStorageService.Services.Handlers;
+using AppStorageService.Services.Handlers.Abstractions;
 using AppStorageService.Services.Services;
 using AppStorageService.Services.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +44,14 @@ public class Startup(IConfiguration configuration)
     
     services.AddAutoMapper(typeof(ApplicationMappingProfile).Assembly);
     
+    services.Configure<KafkaSettings>(Configuration.GetSection("KafkaSettings"));
+
+    services.AddHostedService<KafkaConsumerService>();
+    
     services.AddGrpc();
     var grpcSettings = Configuration.GetSection("GrpcSettings");
     
-    services.AddGrpcClient<AppStoreGrpc.AppStoreService.AppStoreServiceClient>(o =>
+    services.AddGrpcClient<AppStoreGrpc.AppStoreTrackingGrpcService.AppStoreTrackingGrpcServiceClient>(o =>
     {
       o.Address = new Uri(grpcSettings["AppStoreServiceUrl"]!);
     });
@@ -52,6 +59,8 @@ public class Startup(IConfiguration configuration)
     {
       o.Address = new Uri(grpcSettings["GooglePlayServiceUrl"]!);
     });
+    
+    services.AddScoped<IApplicationStatusHandler, ApplicationStatusHandler>();
     
     services.AddScoped<IAppStoreGrpcService, AppStoreGrpcService>();
     services.AddScoped<IGooglePlayGrpcService, GooglePlayGrpcService>();
@@ -70,7 +79,6 @@ public class Startup(IConfiguration configuration)
     if (app.Environment.IsDevelopment())
     {
       app.UseSwagger();
-      
       app.UseSwaggerUI(c =>
       {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "AppStorage API V1");
