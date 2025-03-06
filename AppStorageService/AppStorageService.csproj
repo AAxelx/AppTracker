@@ -41,10 +41,10 @@
 
     <ItemGroup>
       <Protobuf Include="Protos\app_store.proto">
-        <Generator>GrpcServices</Generator>
+        <Generator>Client</Generator>
       </Protobuf>
       <Protobuf Include="Protos\google_play.proto">
-        <Generator>GrpcServices</Generator>
+        <Generator>Client</Generator>
       </Protobuf>
     </ItemGroup>
 

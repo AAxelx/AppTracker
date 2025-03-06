@@ -49,31 +49,35 @@ public class ApplicationRepository(MsSqlDbContext dbContext, IMapper mapper) : I
 
   public async Task UpdateApplicationsStatusAsync(List<UpdateApplicationsStatusDto> updateDtos, CancellationToken stoppingToken)
   {
-    if (updateDtos == null || !updateDtos.Any())
-      return;
-
     var parameters = new List<SqlParameter>();
     var sqlBuilder = new StringBuilder();
     var nowUtc = DateTime.UtcNow;
 
     sqlBuilder.AppendLine("UPDATE Applications SET ");
 
-    sqlBuilder.AppendLine("Status = CASE");
-    sqlBuilder.AppendLine("LastUpdatedAt = CASE");
+    sqlBuilder.AppendLine("Status = CASE ");
 
     for (int i = 0; i < updateDtos.Count; i++)
     {
       var dto = updateDtos[i];
       sqlBuilder.AppendLine($"WHEN Id = @Id_{i} THEN @Status_{i}");
-      sqlBuilder.AppendLine($"WHEN Id = @Id_{i} THEN @LastUpdatedAt_{i}");
-
       parameters.Add(new SqlParameter($"@Id_{i}", dto.Id));
       parameters.Add(new SqlParameter($"@Status_{i}", (int)dto.Status));
+    }
+
+    sqlBuilder.AppendLine("ELSE Status END,");
+
+    sqlBuilder.AppendLine("LastUpdatedAt = CASE ");
+
+    for (int i = 0; i < updateDtos.Count; i++)
+    {
+      var dto = updateDtos[i];
+      sqlBuilder.AppendLine($"WHEN Id = @Id_{i} THEN @LastUpdatedAt_{i}");
       parameters.Add(new SqlParameter($"@LastUpdatedAt_{i}", nowUtc));
     }
 
-    sqlBuilder.AppendLine("END, ");
-    sqlBuilder.AppendLine("END ");
+    sqlBuilder.AppendLine("ELSE LastUpdatedAt END ");
+
     sqlBuilder.AppendLine("WHERE Id IN (" + string.Join(",", updateDtos.Select((dto, index) => $"@Id_{index}")) + ");");
 
     await dbContext.Database.ExecuteSqlRawAsync(sqlBuilder.ToString(), parameters.ToArray(), stoppingToken);

@@ -60,7 +60,7 @@ public class ApplicationService(
     if (application == null)
       return;
 
-    await applicationRepository.DeleteAsync(id);
+    await applicationRepository.DeleteAsync(application.Id);
 
     switch (application.StoreType)
     {

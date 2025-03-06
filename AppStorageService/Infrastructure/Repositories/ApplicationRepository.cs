@@ -13,7 +13,7 @@ public class ApplicationRepository(MsSqlDbContext context, IMapper mapper) : IAp
 {
   public async Task<ApplicationModel?> GetByIdAsync(Guid id)
   {
-    var entity = await context.Applications.FirstOrDefaultAsync(a => a.Id == id);
+    var entity = await context.Applications.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
     return mapper.Map<ApplicationModel>(entity);
   }
   

@@ -28,7 +28,7 @@ public class Startup(IConfiguration configuration)
     services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
     services.Configure<KafkaSettings>(Configuration.GetSection("KafkaSettings"));
 
-    services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
+    // services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
     
     services.AddScoped<AppStoreTrackingGrpcService>();
 

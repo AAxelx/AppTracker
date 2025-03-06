@@ -24,5 +24,9 @@ public class ApplicationMappingProfile : Profile
       .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
       .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
       .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+    
+    CreateMap<ApplicationStatusDto, UpdateApplicationsStatusDto>()
+      .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+      .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
   }
 }
