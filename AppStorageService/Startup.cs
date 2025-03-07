@@ -46,7 +46,7 @@ public class Startup(IConfiguration configuration)
     
     services.Configure<KafkaSettings>(Configuration.GetSection("KafkaSettings"));
 
-    services.AddHostedService<KafkaConsumerService>();
+    // services.AddHostedService<KafkaConsumerService>();
     
     services.AddGrpc();
     var grpcSettings = Configuration.GetSection("GrpcSettings");
@@ -55,6 +55,7 @@ public class Startup(IConfiguration configuration)
     {
       o.Address = new Uri(grpcSettings["AppStoreServiceUrl"]!);
     });
+
     services.AddGrpcClient<GooglePlayGrpc.GooglePlayService.GooglePlayServiceClient>(o =>
     {
       o.Address = new Uri(grpcSettings["GooglePlayServiceUrl"]!);

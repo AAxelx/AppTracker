@@ -28,7 +28,7 @@ public class AppMonitoringService(
             try
             {
                 using var scope = serviceProvider.CreateScope();
-                var kafkaProducer = scope.ServiceProvider.GetRequiredService<IKafkaProducerService>();
+                // var kafkaProducer = scope.ServiceProvider.GetRequiredService<IKafkaProducerService>();
                 var applicationRepository = scope.ServiceProvider.GetRequiredService<IApplicationRepository>();
                 
                 var apps = await applicationRepository.GetAllApplicationsStatusAsync(stoppingToken);
@@ -49,7 +49,7 @@ public class AppMonitoringService(
                 {
                     var updatedApplicationModels = updatedApplicationDtos.ToList();
                     
-                    await kafkaProducer.SendMessageAsync(updatedApplicationModels);
+                    // await kafkaProducer.SendMessageAsync(updatedApplicationModels);
                     await applicationRepository.UpdateApplicationsStatusAsync(updatedApplicationModels, stoppingToken);
                 }
             }
