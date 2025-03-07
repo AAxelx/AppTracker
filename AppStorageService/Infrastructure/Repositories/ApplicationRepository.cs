@@ -16,7 +16,10 @@ public class ApplicationRepository(MsSqlDbContext context, IMapper mapper) : IAp
     var entity = await context.Applications.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
     return mapper.Map<ApplicationModel>(entity);
   }
-  
+
+  public async Task<bool> ExistsByUrlAsync(string url) => 
+    await context.Applications.AsNoTracking().AnyAsync(a => a.Url == url);
+
   public async Task<List<ApplicationModel>> GetByStatusAsync(ApplicationStatus status)
   {
     var result = await context.Applications

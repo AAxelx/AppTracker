@@ -25,14 +25,16 @@ public class ApplicationService(
 
   public async Task AddAsync(AddApplicationDto dto)
   {
-    var model = mapper.Map<ApplicationModel>(dto);//TODO: add check existing Url to skip flow or validate it
+    var isExist = await applicationRepository.ExistsByUrlAsync(dto.Url);
+
+    if (isExist)
+      throw new ArgumentException("Application with this URL already exists.");
+    
+    var model = mapper.Map<ApplicationModel>(dto);
     
     model.StoreType = StoreTypeHelper.GetStoreTypeFromUrl(model.Url);
     if (model.StoreType == StoreType.Unknown)
-    {
-      logger.LogError($"Failed to determine store type for application with URL: {model.Url}");
-      throw new InvalidOperationException($"The store type for the application with URL {model.Url} could not be determined.");
-    }
+      throw new NotSupportedException($"The store type for the application with URL {model.Url} is not supported.");
     
     model.Id = Guid.NewGuid();
 
@@ -74,5 +76,4 @@ public class ApplicationService(
         throw new InvalidOperationException("Unsupported store type");
     }
   }
-
 }
