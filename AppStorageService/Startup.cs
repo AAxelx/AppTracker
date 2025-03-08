@@ -46,7 +46,7 @@ public class Startup(IConfiguration configuration)
     
     services.Configure<KafkaSettings>(Configuration.GetSection("KafkaSettings"));
 
-    // services.AddHostedService<KafkaConsumerService>();
+    services.AddHostedService<KafkaConsumerService>();
     
     services.AddGrpc();
     var grpcSettings = Configuration.GetSection("GrpcSettings");
