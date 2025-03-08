@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package AppStoreGrpc;
+
+service AppStoreTrackingGrpcService {
+  rpc AddApplicationTracking (AddApplicationRequest) returns (ApplicationResponse);
+  rpc RemoveApplicationTracking (RemoveApplicationRequest) returns (ApplicationResponse);
+}
+
+message AddApplicationRequest {
+  string id = 1;
+  string url = 2;
+  ApplicationStatus status = 3;
+}
+
+message ApplicationResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message RemoveApplicationRequest {
+  string id = 1;
+}
+
+enum ApplicationStatus {
+  NOTREQUESTED = 0;
+  DELETED = 1;
+  ACTIVE = 2;
+}

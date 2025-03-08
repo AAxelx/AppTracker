@@ -1,8 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStorageService", "AppStorageService\AppStorageService.csproj", "{BEDDCC1F-3DE1-48F7-859D-B54B7A19BA08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppStoreTracker", "AppStoreTracker\AppStoreTracker.csproj", "{75966691-C424-4CD1-9518-6858763937B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BEDDCC1F-3DE1-48F7-859D-B54B7A19BA08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDDCC1F-3DE1-48F7-859D-B54B7A19BA08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDDCC1F-3DE1-48F7-859D-B54B7A19BA08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDDCC1F-3DE1-48F7-859D-B54B7A19BA08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75966691-C424-4CD1-9518-6858763937B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75966691-C424-4CD1-9518-6858763937B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75966691-C424-4CD1-9518-6858763937B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75966691-C424-4CD1-9518-6858763937B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
